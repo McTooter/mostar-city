@@ -1,0 +1,9 @@
+{
+  "name": "mostar-city",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone cinematic Mostar city scroll page",
+  "scripts": {
+    "start": "python3 -m http.server 4173"
+  }
+}
