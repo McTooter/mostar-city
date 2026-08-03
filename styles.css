@@ -44,7 +44,8 @@ button { border: 0; font: inherit; }
 .site-shell { min-height: 100vh; }
 .cinema-scroll { position: relative; height: calc(100vh + 3700px); }
 .stage { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden; isolation: isolate; background: #7fb4d4; }
-.world { position: absolute; inset: 0; overflow: hidden; background: #79b7dd; }
+.world { position: absolute; inset: 0; overflow: hidden; background: #79b7dd; }.stage, .world { contain: paint; }
+
 
 .scene-img, .site-header, .sights-slider, .sights-controls, .hero-title, .intro-copy, .story-panel, .back-stack, .sky-img, .shade { position: absolute; }
 .scene-img { display: block; user-select: none; -webkit-user-drag: none; will-change: transform, opacity, filter; pointer-events: none; backface-visibility: hidden; }
@@ -64,7 +65,8 @@ button { border: 0; font: inherit; }
 .back-four { z-index: 1; opacity: 0.72; mix-blend-mode: screen; transform: translate3d(-50%, calc(var(--four-y) - 110px), 0) scale(var(--four-scale)); }
 
 .sights-slider { z-index: 2; left: 0; right: 0; top: var(--sights-top); padding: 0; opacity: 1; visibility: var(--sights-visibility); transform: translate3d(var(--sights-enter-x), var(--sights-y), 0) scale(var(--sights-scale)); transform-origin: 0 0; pointer-events: auto; will-change: transform; }
-.sights-track { display: flex; gap: clamp(16px, 1.15vw, 24px); align-items: stretch; transform: translate3d(calc(var(--sights-shift) - 18vw), 0, 0); transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
+.sights-track { display: flex; gap: clamp(16px, 1.15vw, 24px); align-items: stretch; transform: translate3d(calc(var(--sights-shift) - 18vw), 0, 0); transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }.sights-track { backface-visibility: hidden; }
+
 .sights-track.is-jumping { transition: none; }
 .sight-card { position: relative; flex: 0 0 clamp(360px, 19.4vw, 430px); height: 220px; padding: 24px; overflow: hidden; border: 1px solid rgba(253, 241, 225, 0.42); border-radius: 24px; color: #000; background: #fdf1e1; box-shadow: 0 18px 52px rgba(2, 47, 64, 0.12); backdrop-filter: none; cursor: pointer; pointer-events: auto; user-select: none; }
 .sight-card::before, .sight-card::after { content: none; }
@@ -76,7 +78,8 @@ button { border: 0; font: inherit; }
 .sight-card p { position: absolute; left: 24px; right: 24px; bottom: 24px; max-width: 100%; margin: 12px 0 0; color: #000; font-size: 16px; font-weight: 400; line-height: 1.16; display: -webkit-box; max-height: calc(2em * 1.16); overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .sights-controls { z-index: 5; left: 48px; right: auto; top: calc(var(--sights-screen-top) + 220px + 16px); display: flex; justify-content: flex-start; gap: 14px; opacity: var(--sights-controls-opacity); transform: translate3d(0, var(--sights-y), 0); pointer-events: none; will-change: transform, opacity; }
 .sights-controls.is-ready { pointer-events: auto; }
-.sight-nav { width: 54px; height: 54px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; color: #111411; background: rgba(253, 241, 225, 0.94); box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2); cursor: pointer; }
+.sight-nav { width: 54px; height: 54px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; color: #111411; background: rgba(253, 241, 225, 0.94); box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2); cursor: pointer; }.sight-nav, .sight-card, .note-button { -webkit-tap-highlight-color: transparent; }
+
 
 .hero-title { z-index: 3; left: 50%; top: clamp(122px, 19vh, 205px); width: min(94vw, 1780px); margin: 0; color: #fdf1e1; font-family: "Ogg Medium", serif; font-size: 14rem; font-weight: 500; line-height: 0.78; text-align: center; text-shadow: none; transform: translate3d(-50%, var(--title-y), 0) scale(var(--title-scale)); opacity: var(--title-opacity); will-change: transform, opacity; }
 .bridge-img { z-index: 4; left: 50%; bottom: var(--bridge-bottom); width: min(var(--bridge-width), 2140px); height: auto; transform: translate3d(var(--bridge-x), var(--bridge-y), 0) scale(var(--bridge-scale)); transform-origin: 50% 48%; }

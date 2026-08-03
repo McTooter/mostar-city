@@ -1,4 +1,5 @@
 const section = document.querySelector(".cinema-scroll");
+const stage = document.querySelector(".stage");
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const track = document.querySelector(".sights-track");
@@ -18,6 +19,8 @@ let rafPending = false;
 let sightCards = [];
 const originalSightCount = originalSightCards.length;
 let activeSight = originalSightCount;
+let lastFrameTime = 0;
+const variableCache = new Map();
 
 const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 const smoothstep = (e0, e1, v) => {
@@ -33,24 +36,32 @@ const segmentInOut = (s, a, b, c, d) => {
 const getScrollDistance = () => clamp(-section.getBoundingClientRect().top, 0, section.offsetHeight - window.innerHeight);
 
 function setVariable(name, value) {
-  root.style.setProperty(name, String(value));
+  const next = String(value);
+  if (variableCache.get(name) === next) return;
+  variableCache.set(name, next);
+  stage.style.setProperty(name, next);
 }
 
-function update() {
+function update(timestamp = performance.now()) {
   rafPending = false;
+  const delta = lastFrameTime ? Math.min(50, timestamp - lastFrameTime) : 16.67;
+  const scrollBlend = 1 - Math.exp(-delta / 72);
+  const mouseBlend = 1 - Math.exp(-delta / 48);
+  lastFrameTime = timestamp;
   targetScroll = getScrollDistance();
 
   if (!initialized || reduceMotion.matches) {
     smoothScroll = targetScroll;
+    mouseX = 0;
+    mouseY = 0;
     initialized = true;
   } else {
-    smoothScroll = lerp(smoothScroll, targetScroll, 0.14);
+    smoothScroll = lerp(smoothScroll, targetScroll, scrollBlend);
+    mouseX = lerp(mouseX, targetMouseX, mouseBlend);
+    mouseY = lerp(mouseY, targetMouseY, mouseBlend);
   }
 
   if (Math.abs(smoothScroll - targetScroll) < 0.08) smoothScroll = targetScroll;
-
-  mouseX = lerp(mouseX, targetMouseX, 0.12);
-  mouseY = lerp(mouseY, targetMouseY, 0.12);
 
   const frame2 = segmentInOut(smoothScroll, 560, 900, 1300, 1620);
   const frame3 = segmentInOut(smoothScroll, 1760, 2140, 2540, 2700);
@@ -192,6 +203,7 @@ window.addEventListener("resize", () => {
   updateSightSlider();
   requestTick();
 });
+reduceMotion.addEventListener?.("change", requestTick);
 window.addEventListener("pointermove", (event) => {
   targetMouseX = event.clientX / window.innerWidth - 0.5;
   targetMouseY = event.clientY / window.innerHeight - 0.5;
